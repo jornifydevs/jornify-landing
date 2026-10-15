@@ -1,0 +1,26 @@
+#!/bin/sh
+# Valida que la rama siga la convención de nombres antes de hacer push.
+# Ramas permitidas: main, feat/*, fix/*, chore/*, docs/*, refactor/*
+
+BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null)
+
+ALLOWED="^(main|feat|fix|chore|docs|refactor)(/[a-z0-9._-]+)?$"
+
+if ! echo "$BRANCH" | grep -qE "$ALLOWED"; then
+  echo ""
+  echo "  ✗ Push bloqueado. La rama \"$BRANCH\" no sigue la convención."
+  echo ""
+  echo "  Formatos permitidos:"
+  echo "    main"
+  echo "    feat/<descripcion>      → nueva funcionalidad"
+  echo "    fix/<descripcion>       → corrección de bug"
+  echo "    chore/<descripcion>     → mantenimiento / deps"
+  echo "    docs/<descripcion>      → documentación"
+  echo "    refactor/<descripcion>  → refactorización"
+  echo ""
+  echo "  Ejemplo: git checkout -b feat/registro-horario"
+  echo ""
+  exit 1
+fi
+
+exit 0
